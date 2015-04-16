@@ -3,7 +3,7 @@
 ## 概要
 
 * オンメモリで動くKVSです
-* Json-Textのみ収納できます
+* ~~Json-Textのみ収納できます~~ ← 一部のjsonが判定できないので中止
 * HTTPプロトコルで登録・変更・削除が出来ます
 * REST APIです
 
@@ -30,7 +30,7 @@ go run json_rest_server.go -port 8888
 * POSTパラメータで登録します。
 * pathがKeyになり、リクエストボディが登録されるjson(Value)になります。
 * 同一KeyでPOSTすると、上書きされます。
-* 不正なJsonをPOSTすると、エラーになります。
+* ~~不正なJsonをPOSTすると、エラーになります。~~
 * 二階層以上のpath名は登録に失敗します。
 * path名に「.」をつけるのは問題ありません。
 
@@ -39,7 +39,7 @@ go run json_rest_server.go -port 8888
 * GETパラメータでデータ閲覧できます。
 * pathがKeyになります。
 * 存在しないKeyを指定するとエラーになります。
-* 「/debug」を渡すと、登録されているKey:Valueが全出力されます。(サーバーコンソール上)
+* 「/_debug_」を渡すと、登録されているKey:Value等が全出力されます。(サーバーコンソール上)
 
 
 ### データ削除
@@ -49,7 +49,7 @@ go run json_rest_server.go -port 8888
 
 ## 検証方法
 ```
-curl -X POST http://localhost:8080/hogehoge/poe -d '{"test":"hogehoge"}'
+curl -X POST http://localhost:8080/hogehoge/poe -d '{"test":"hogehoge"}' <= false
 curl -X POST http://localhost:8080/hogehoge -d '{"test":"hogehoge"}'
 curl -X POST http://localhost:8080/hogehoge2 -d '{"test2":"fuga"}'
 
@@ -61,6 +61,6 @@ curl -X DELETE http://localhost:8080/hogehoge2
 ## ToDo
 
 * messagepackとか対応してみようかな
-* 管理コマンドももう少し充実
+* Template化
 
 
