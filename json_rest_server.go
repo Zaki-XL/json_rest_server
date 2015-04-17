@@ -27,7 +27,10 @@ var t time.Time
 // Output Header ----------------
 func outputHeader(w http.ResponseWriter) {
 	//w.Header().Set("Content-Type", "text/plain")       // DEBUG
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+	w.Header().Set("Access-Control-Allow-Methods", "GET,POST,DELETE")
 	w.WriteHeader(http.StatusOK)
 }
 
@@ -104,13 +107,13 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 	param := retParam(r)
 
-/* 所々の理由により中止
+	/* 所々の理由により中止
 	// Json Check
 	if isJSON(body) == false {
 		w.Write([]byte("{\"Message\":\"Invalid Json Data!! Post Aborted...\"}\n"))
 		return
 	}
-*/
+	*/
 
 	m[param] = body
 

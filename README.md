@@ -27,7 +27,7 @@ go run json_rest_server.go -port 8888
 
 
 ### データ登録
-* POSTパラメータで登録します。
+* POSTリクエストで登録します。
 * pathがKeyになり、リクエストボディが登録されるjson(Value)になります。
 * 同一KeyでPOSTすると、上書きされます。
 * ~~不正なJsonをPOSTすると、エラーになります。~~
@@ -36,14 +36,14 @@ go run json_rest_server.go -port 8888
 
 
 ### データ閲覧
-* GETパラメータでデータ閲覧できます。
+* GETリクエストでデータ閲覧できます。
 * pathがKeyになります。
 * 存在しないKeyを指定するとエラーになります。
 * 「/_debug_」を渡すと、登録されているKey:Value等が全出力されます。(サーバーコンソール上)
 
 
 ### データ削除
-* DELETEパラメータでデータ削除できます。
+* DELETEリクエストでデータ削除できます。
 * 存在しないKeyを削除しても問題ありません。(何も変化しないだけです)
 
 
@@ -53,14 +53,14 @@ curl -X POST http://localhost:8080/hogehoge/poe -d '{"test":"hogehoge"}' <= fals
 curl -X POST http://localhost:8080/hogehoge -d '{"test":"hogehoge"}'
 curl -X POST http://localhost:8080/hogehoge2 -d '{"test2":"fuga"}'
 
-curl http://localhost:8080/debug
-curl -X DELETE http://localhost:8080/hogehoge
-curl -X DELETE http://localhost:8080/hogehoge2
+curl http://localhost:8080/_debug_ => DEBUG Message 
+curl -X DELETE http://localhost:8080/hogehoge => {"test":"hogehoge"}
+curl -X DELETE http://localhost:8080/hogehoge2 => {"test2":"fuga"}
 ```
 
 ## ToDo
 
-* messagepackとか対応してみようかな
+* データ容量圧縮(gzip)
+* list実装との速度比較
+* messagepackとか対応
 * Template化
-
-
