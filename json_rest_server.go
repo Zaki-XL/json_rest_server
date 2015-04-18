@@ -117,6 +117,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 	param := retParam(r)
 
+
 	/* 所々の理由により中止
 	// Json Check
 	if isJSON(body) == false {
@@ -144,15 +145,17 @@ func delHandler(w http.ResponseWriter, r *http.Request) {
 	defer mu.Unlock()
 
 	param := retParam(r)
+	outputHeader(w)
+
 	// Reset -------------------
 	if param == "_reset_" {
 		m = make(map[string]string)
+	w.Write([]byte("{\"Message\":\"Delete All Keys!!\"}\n"))
 		return
 	}
 
 	delete(m, param)
 
-	outputHeader(w)
 	w.Write([]byte("{\"Message\":\"Delete Key => "))
 	w.Write([]byte(param))
 	w.Write([]byte("\"}\n"))
