@@ -9,13 +9,15 @@ import (
 	"github.com/drone/routes"
 	"github.com/kr/pretty"
 	"net/http"
+	"sync"
 	"time"
 )
 
-// Variable Set -----------------
-var m map[string]string = make(map[string]string)
+// initialize ---------------------
+var mu sync.RWMutex
+var m map[string]string
 
-// counter
+// counter ------------------------
 var post_cnt int
 var get_cnt int
 var miss_cnt int
@@ -24,7 +26,7 @@ var del_cnt int
 // time
 var t time.Time
 
-// Output Header ----------------
+// Output Header -----------------
 func outputHeader(w http.ResponseWriter) {
 	//w.Header().Set("Content-Type", "text/plain")       // DEBUG
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -50,6 +52,10 @@ func isJSON(s string) bool {
 
 // View Data -------------------
 func viewHandler(w http.ResponseWriter, r *http.Request) {
+
+	// Mutex Lock(Read) -----------
+	mu.RLock()
+	defer mu.RUnlock()
 
 	param := retParam(r)
 	outputHeader(w)
@@ -101,6 +107,10 @@ func debugPrint() {
 // Post Data -------------------
 func postHandler(w http.ResponseWriter, r *http.Request) {
 
+	// Mutex Lock --------------
+	mu.Lock()
+	defer mu.Unlock()
+
 	bufbody := new(bytes.Buffer)
 	bufbody.ReadFrom(r.Body)
 	body := bufbody.String()
@@ -129,7 +139,16 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 // Delete Data -----------------
 func delHandler(w http.ResponseWriter, r *http.Request) {
 
+	// Mutex Lock --------------
+	mu.Lock()
+	defer mu.Unlock()
+
 	param := retParam(r)
+	// Reset -------------------
+	if param == "_reset_" {
+		m = make(map[string]string)
+		return
+	}
 
 	delete(m, param)
 
@@ -142,6 +161,9 @@ func delHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	m = make(map[string]string)
+	mu = sync.RWMutex{}
 
 	// Parameter Setting ------------------
 	var port_int int

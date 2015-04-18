@@ -63,4 +63,5 @@ curl -X DELETE http://localhost:8080/hogehoge2 => {"test2":"fuga"}
 * データ容量圧縮(gzip)
 * list実装との速度比較
 * messagepackとか対応
+* パスワード
 * Template化
